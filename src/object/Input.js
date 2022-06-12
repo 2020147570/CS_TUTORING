@@ -112,12 +112,11 @@ const Input = ({ submitData }) => {
     id: "",
     class: "",
     grade: "",
-    curPeople: 0,
+    curPeople: [],
     hopePeople: 0,
   });
 
   const onChange = (e) => {
-    console.log(e.target);
     setInfo({
       ...info,
       [e.target.name]: e.target.value,

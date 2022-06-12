@@ -1,6 +1,6 @@
 import { useState } from "react";
 import styled from "styled-components";
-import DisplayList from "./object/DisplayList.js";
+import Display from "./object/Display.js";
 import Input from "./object/Input.js";
 
 const Container = styled.div`
@@ -30,9 +30,31 @@ const App = () => {
   const [displayList, setDisplayList] = useState([]);
   const [inputChk, setInputChk] = useState(false);
 
+  console.log(displayList);
+
   const submitData = (data) => {
     setDisplayList([...displayList, data]);
     setInputChk(false);
+  };
+
+  const submitStudentData = (data, teacherId, teacherClass) => {
+    const findIndex = displayList.findIndex(
+      (element) => element.id === teacherId && element.class === teacherClass
+    );
+
+    const copyList = [...displayList];
+    if (findIndex !== -1) {
+      const copyListCurPeople = [...copyList[findIndex].curPeople];
+      copyListCurPeople.push(data);
+      console.log(copyListCurPeople);
+
+      copyList[findIndex] = {
+        ...copyList[findIndex],
+        curPeople: copyListCurPeople,
+      };
+    }
+
+    setDisplayList(copyList);
   };
 
   const addDisplay = () => {
@@ -41,7 +63,13 @@ const App = () => {
 
   return (
     <Container>
-      <DisplayList displayList={displayList} />
+      {displayList.map((_, i) => (
+        <Display
+          key={i}
+          item={displayList[i]}
+          submitStudentData={submitStudentData}
+        />
+      ))}
       {inputChk ? <Input submitData={submitData} /> : ""}
       <AddDisplay onClick={addDisplay}>{!inputChk ? "+" : "-"}</AddDisplay>
     </Container>
